@@ -1,0 +1,34 @@
+version: "3.8"
+services:
+  app:
+    container_name: vogelverklikker
+    networks:
+       - vogelverklikker
+    build:
+      dockerfile: docker-resources/Dockerfile
+      context: .
+    depends_on:
+        - db
+
+    environment:
+      CANDLE_SYMBOLS: '["BTC-USDT"]'
+      ES_ENDPOINT: "http://elasticsearch:9200"
+
+  db:
+    image: postgres:12.0-alpine
+    networks:
+       - vogelverklikker
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=nandoe_user
+      - POSTGRES_PASSWORD=dev
+      - POSTGRES_DB=nandoe
+
+networks:
+  vogelverklikker:
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
